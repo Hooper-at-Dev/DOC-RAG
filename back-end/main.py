@@ -147,9 +147,9 @@ def handle_chat(request: ChatRequest):
             if is_valid:
                 valid_citations += 1
                 
-        citation_accuracy = int((valid_citations / len(citations)) * 100)
+         = int((valid_citations / len(citations)) * 100)
     else:
-        citation_accuracy = 100 if confidence_percentage == 0 else 0
+        citation_accuracy = 0
 
     response_payload = {
         "question": user_query,
