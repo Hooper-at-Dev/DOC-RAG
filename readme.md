@@ -1,10 +1,3 @@
-Ah, I see exactly what happened in your screenshot (`image_c8fe9d.png`). The chat interface's markdown parser gets confused when there are code blocks *inside* of another code block, causing it to break the text apart into separate chat bubbles and formatting blocks.
-
-To fix this, I am wrapping the entire file in a stronger markdown container (using four backticks). This will force the interface to keep it all as one single, unbroken, copyable block of code.
-
-Here is the complete, unbroken `README.md` file:
-
-```markdown
 # Compliance Copilot
 
 Compliance Copilot is a lightweight, full-stack AI tool designed to answer questions about organizational policy and regulatory documents. It uses a Retrieval-Augmented Generation (RAG) architecture to ensure that every answer is grounded in actual source material, providing transparent inline citations, a confidence score, and strict refusal capabilities when the answer is not found in the documents.
@@ -98,5 +91,3 @@ If taking this to production, the following changes would be necessary:
 *   **Database Migration**: Migrate the local JSON files and Qdrant instance to a managed PostgreSQL database using `pgvector`.
 *   **Asynchronous Message Queues**: Move the PDF ingestion pipeline from FastAPI `BackgroundTasks` to a dedicated Celery or Redis queue to handle heavy OCR workloads safely without blocking the web server.
 *   **Quality Monitoring**: Log all incoming prompts, LLM generations, and user feedback (Thumbs Up/Down) to a tool like LangSmith or Datadog to continuously monitor hallucination rates and adjust embedding distance thresholds.
-
-```
