@@ -1,3 +1,10 @@
+Ah, I see exactly what happened in your screenshot (`image_c8fe9d.png`). The chat interface's markdown parser gets confused when there are code blocks *inside* of another code block, causing it to break the text apart into separate chat bubbles and formatting blocks.
+
+To fix this, I am wrapping the entire file in a stronger markdown container (using four backticks). This will force the interface to keep it all as one single, unbroken, copyable block of code.
+
+Here is the complete, unbroken `README.md` file:
+
+```markdown
 # Compliance Copilot
 
 Compliance Copilot is a lightweight, full-stack AI tool designed to answer questions about organizational policy and regulatory documents. It uses a Retrieval-Augmented Generation (RAG) architecture to ensure that every answer is grounded in actual source material, providing transparent inline citations, a confidence score, and strict refusal capabilities when the answer is not found in the documents.
@@ -49,3 +56,47 @@ To respect the 5-6 hour time constraint while delivering a robust AI product, a 
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   ```
+3. Install the dependencies:
+   ```bash
+   pip install fastapi uvicorn pydantic python-multipart python-dotenv google-genai pymupdf easyocr sentence-transformers qdrant-client pillow numpy
+   ```
+4. Set up your environment variables by creating a `.env` file in the same directory as the Python code:
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   ```
+5. Start the backend server:
+   ```bash
+   python main.py
+   ```
+   *The server will start on `http://localhost:8000`. Upon first run, it will automatically download the embedding model (`BAAI/bge-small-en-v1.5`) and initialize the local Qdrant database.*
+
+### 2. Setup the Frontend (React/Next.js)
+
+1. Open a new terminal window and navigate to your frontend directory.
+2. Install the Node dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open your browser and navigate to `http://localhost:3000`.
+
+### 3. Usage Instructions
+
+1. **Upload Documents**: Click on "Dashboard" in the left sidebar. Drag and drop your PDF policy documents into the upload zone. The backend will asynchronously OCR, chunk, and embed them into the Qdrant database.
+2. **Ask Questions**: Navigate back to "Ask Copilot". Try asking a question.
+3. **Inspect Evidence**: When the AI answers, click the "Evidence" button on the right to open the panel. Here you can view the system's Confidence Score, Citation Accuracy, and the raw text chunks retrieved from the vector database.
+
+---
+
+## 🔮 Production Considerations (Next Steps)
+
+If taking this to production, the following changes would be necessary:
+*   **Database Migration**: Migrate the local JSON files and Qdrant instance to a managed PostgreSQL database using `pgvector`.
+*   **Asynchronous Message Queues**: Move the PDF ingestion pipeline from FastAPI `BackgroundTasks` to a dedicated Celery or Redis queue to handle heavy OCR workloads safely without blocking the web server.
+*   **Quality Monitoring**: Log all incoming prompts, LLM generations, and user feedback (Thumbs Up/Down) to a tool like LangSmith or Datadog to continuously monitor hallucination rates and adjust embedding distance thresholds.
+
+```
