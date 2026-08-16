@@ -147,7 +147,7 @@ def handle_chat(request: ChatRequest):
             if is_valid:
                 valid_citations += 1
                 
-         = int((valid_citations / len(citations)) * 100)
+        citation_accuracy = int((valid_citations / len(citations)) * 100)
     else:
         citation_accuracy = 0
 

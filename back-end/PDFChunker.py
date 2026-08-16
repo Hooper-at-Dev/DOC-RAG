@@ -27,7 +27,7 @@ class PDFChunker:
     def __init__(
         self, 
         registry_path="document_registry.json", 
-        chunk_size=1000, 
+        chunk_size=2500, 
         overlap_pct=0.30,
         use_gpu_ocr=True,
         ocr_languages=['en'],
@@ -222,7 +222,8 @@ class PDFChunker:
 
         while start_idx < text_length:
             end_idx = min(start_idx + self.chunk_size, text_length)
-            chunk_text = full_text[start_idx:end_idx].strip()
+            header_context = f"[Document: {filename}]\n"
+            chunk_text = header_context + full_text[start_idx:end_idx].strip() 
 
             if chunk_text:
                 pages = self._map_chunk_to_pages(start_idx, end_idx, page_offsets)
